@@ -3,6 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 
+**English** | [日本語](README.ja.md)
+
 An [MCP](https://modelcontextprotocol.io) server that lets an AI assistant
 (Claude, etc.) **read and write your [MindNode](https://mindnode.com) mind maps
 directly** — by parsing the `.mindnode` file format itself. No AppleScript, no
