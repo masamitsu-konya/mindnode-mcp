@@ -4,9 +4,22 @@ version = "0.1.0"
 description = "MCP server for reading and writing MindNode (.mindnode) documents directly via their binary-plist format."
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Masamitsu Konya" }]
+keywords = ["mcp", "mindnode", "mind-map", "claude", "plist"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+    "Topic :: Office/Business",
+]
 dependencies = [
     "mcp[cli]>=1.2.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/masamitsu-konya/mindnode-mcp"
+Repository = "https://github.com/masamitsu-konya/mindnode-mcp"
 
 [project.scripts]
 mindnode-mcp = "mindnode_mcp.server:main"
