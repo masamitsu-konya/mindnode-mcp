@@ -60,23 +60,37 @@ def list_documents(root: Path | None = None) -> list[Path]:
     return docs
 
 
+def _confine(path: Path, base: Path) -> Path:
+    """Return `path` resolved, or raise if it escapes the documents directory."""
+    resolved = path.resolve()
+    if not resolved.is_relative_to(base.resolve()):
+        raise ValueError(f"Path is outside the MindNode documents directory: {path}")
+    return resolved
+
+
+def resolve_subdir(folder: str, root: Path | None = None) -> Path:
+    """Resolve `folder` under the documents dir, rejecting traversal/absolute paths."""
+    base = root or docs_dir()
+    return _confine(base / folder, base)
+
+
 def resolve_document(name_or_path: str, root: Path | None = None) -> Path:
     """Resolve a user-supplied document reference to an absolute .mindnode path.
 
-    Accepts an absolute path, a path relative to the documents dir, or a bare
+    Accepts an absolute path (must lie inside the documents dir), a path relative to the documents dir, or a bare
     document name (with or without the .mindnode suffix), matched case-folded.
     """
     base = root or docs_dir()
 
     p = Path(name_or_path).expanduser()
     if p.is_absolute() and p.exists():
-        return p
+        return _confine(p, base)
 
     rel = base / name_or_path
     if rel.exists():
-        return rel
+        return _confine(rel, base)
     if (rel_ext := base / f"{name_or_path}.mindnode").exists():
-        return rel_ext
+        return _confine(rel_ext, base)
 
     needle = name_or_path.removesuffix(".mindnode").casefold()
     matches = [d for d in list_documents(base) if d.stem.casefold() == needle]
