@@ -19,6 +19,8 @@ from . import paths
 
 mcp = FastMCP("mindnode")
 
+_IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".heic", ".tif", ".tiff", ".bmp", ".webp"}
+
 
 # --------------------------------------------------------------------------- #
 # read tools
@@ -292,6 +294,8 @@ def attach_image(document: str, node: str, image_path: str) -> dict[str, Any]:
         raise ValueError(f"Image not found: {src}")
 
     ext = src.suffix.lower() or ".png"
+    if ext not in _IMAGE_EXTS:
+        raise ValueError(f"Unsupported image type {ext!r}; expected one of {sorted(_IMAGE_EXTS)}.")
     file_name = f"{doc.new_node_id()}{ext}"
     res_dir = path / "resources"
     res_dir.mkdir(exist_ok=True)
@@ -323,7 +327,7 @@ def create_map(
     """
     base = paths.docs_dir()
     skeleton = _skeleton_document(base)
-    target_dir = base / folder if folder else base
+    target_dir = paths.resolve_subdir(folder, base) if folder else base
     target_dir.mkdir(parents=True, exist_ok=True)
     new_path = _unique_path(target_dir, title)
 
